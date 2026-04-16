@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop Smart - Home</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:linear-gradient(135deg,#eef2ff,#f8fbff);}
+header{
+    background:linear-gradient(120deg,#4facfe,#6a11cb);
+    color:white;
+    padding:25px 20px;
+    text-align:center;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+header h1{font-size:36px;margin-bottom:8px;}
+header p{font-size:16px;}
+nav{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    flex-wrap:wrap;
+    padding:16px;
+    background:white;
+    position:sticky;
+    top:0;
+    z-index:999;
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+nav a, nav button{
+    text-decoration:none;
+    color:#333;
+    font-weight:bold;
+    padding:10px 18px;
+    border-radius:30px;
+    transition:0.3s;
+    background:#f3f6ff;
+    border:none;
+    cursor:pointer;
+    font-size:14px;
+}
+nav a:hover, nav button:hover{background:linear-gradient(120deg,#4facfe,#6a11cb);color:white;}
+.container{width:95%;margin:30px auto;}
+.title-bar{text-align:center;margin-bottom:25px;}
+.title-bar h2{font-size:32px;color:#222;margin-bottom:8px;}
+.title-bar p{color:#666;font-size:15px;}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:25px;
+}
+.card{
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 22px rgba(0,0,0,0.12);
+    transition:0.35s;
+    position:relative;
+}
+.card:hover{
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:0 16px 30px rgba(0,0,0,0.18);
+}
+.card img{
+    width:100%;
+    height:190px;
+    object-fit:cover;
+    display:block;
+}
+.card-body{padding:18px;text-align:center;}
+.card-body h3{
+    font-size:20px;
+    color:#222;
+    margin-bottom:10px;
+    min-height:48px;
+}
+.card-body p{
+    color:#666;
+    font-size:14px;
+    margin-bottom:16px;
+}
+.btn{
+    display:inline-block;
+    text-decoration:none;
+    padding:11px 22px;
+    border-radius:30px;
+    background:linear-gradient(120deg,#4facfe,#6a11cb);
+    color:white;
+    font-weight:bold;
+    transition:0.3s;
+}
+.btn:hover{opacity:0.9;transform:scale(1.05);}
+.badge{
+    position:absolute;
+    top:12px;
+    left:12px;
+    background:rgba(0,0,0,0.65);
+    color:white;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:12px;
+}
+footer{
+    margin-top:40px;
+    background:#111827;
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+@media(max-width:600px){
+    header h1{font-size:28px;}
+    .title-bar h2{font-size:24px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Shop Smart</h1>
+    <p id="welcomeText">Welcome User | Explore 100 amazing categories</p>
+</header>
+
+<nav>
+    <a href="home.html">Home</a>
+    <a href="clicks.html">My Clicks</a>
+    <button onclick="logout()">Logout</button>
+</nav>
+
+<div class="container">
+    <div class="title-bar">
+        <h2>Top Shopping Categories</h2>
+        <p>Click any category to save it and open its product page</p>
+    </div>
+
+    <div class="grid" id="categoryGrid"></div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Shop Smart | Categories Layout</p>
+</footer>
+
+<script src="script.js"></script>
+<script>
+checkLogin();
+
+const categoryNames = [
+  "Gaming Laptop","Wireless Headphones","Smart Watch","Coffee Maker","Sports Shoes",
+  "Smartphone","Bluetooth Speaker","DSLR Camera","Tablet","Power Bank",
+  "Keyboard","Mouse","Monitor","Printer","Webcam",
+  "Office Chair","Study Table","Backpack","Water Bottle","Fitness Band",
+  "T-Shirt","Jeans","Jacket","Sneakers","Sunglasses",
+  "Face Wash","Perfume","Hair Dryer","Trimmer","Lip Balm",
+  "Cookware Set","Mixer Grinder","Microwave Oven","Air Fryer","Electric Kettle",
+  "Bedsheet","Curtains","Wall Clock","Lamp","Sofa Cover",
+  "Cricket Bat","Football","Badminton Racket","Gym Gloves","Yoga Mat",
+  "School Bag","Notebook","Pen Set","Calculator","Geometry Box",
+  "Novel Book","Comic Book","Story Book","Dictionary","Magazine",
+  "Toy Car","Doll","Building Blocks","Puzzle Game","Remote Helicopter",
+  "Car Cover","Bike Helmet","Car Vacuum Cleaner","Tyre Inflator","Phone Holder",
+  "Plant Pot","Garden Tools","Watering Can","Seed Pack","Artificial Plant",
+  "Dog Food","Cat Food","Pet Bed","Pet Toy","Pet Shampoo",
+  "Chocolate Box","Dry Fruits","Biscuits","Green Tea","Coffee Powder",
+  "Travel Bag","Trolley Bag","Passport Cover","Neck Pillow","Travel Bottle",
+  "USB Cable","Charger","Extension Board","LED Bulb","Emergency Light",
+  "Handbag","Wallet","Belt","Watch for Men","Watch for Women",
+  "Protein Powder","Dumbbells","Earbuds","Projector","Gaming Chair"
+];
+
+const categoryLinks = [
+  "https://www.amazon.com/s?k=gaming+laptop","https://www.amazon.com/s?k=wireless+headphones","https://www.amazon.com/s?k=smart+watch","https://www.amazon.com/s?k=coffee+maker","https://www.amazon.com/s?k=sports+shoes",
+  "https://www.amazon.com/s?k=smartphone","https://www.amazon.com/s?k=bluetooth+speaker","https://www.amazon.com/s?k=dslr+camera","https://www.amazon.com/s?k=tablet","https://www.amazon.com/s?k=power+bank",
+  "https://www.amazon.com/s?k=keyboard","https://www.amazon.com/s?k=mouse","https://www.amazon.com/s?k=monitor","https://www.amazon.com/s?k=printer","https://www.amazon.com/s?k=webcam",
+  "https://www.amazon.com/s?k=office+chair","https://www.amazon.com/s?k=study+table","https://www.amazon.com/s?k=backpack","https://www.amazon.com/s?k=water+bottle","https://www.amazon.com/s?k=fitness+band",
+  "https://www.amazon.com/s?k=tshirt","https://www.amazon.com/s?k=jeans","https://www.amazon.com/s?k=jacket","https://www.amazon.com/s?k=sneakers","https://www.amazon.com/s?k=sunglasses",
+  "https://www.amazon.com/s?k=face+wash","https://www.amazon.com/s?k=perfume","https://www.amazon.com/s?k=hair+dryer","https://www.amazon.com/s?k=trimmer","https://www.amazon.com/s?k=lip+balm",
+  "https://www.amazon.com/s?k=cookware+set","https://www.amazon.com/s?k=mixer+grinder","https://www.amazon.com/s?k=microwave+oven","https://www.amazon.com/s?k=air+fryer","https://www.amazon.com/s?k=electric+kettle",
+  "https://www.amazon.com/s?k=bedsheet","https://www.amazon.com/s?k=curtains","https://www.amazon.com/s?k=wall+clock","https://www.amazon.com/s?k=lamp","https://www.amazon.com/s?k=sofa+cover",
+  "https://www.amazon.com/s?k=cricket+bat","https://www.amazon.com/s?k=football","https://www.amazon.com/s?k=badminton+racket","https://www.amazon.com/s?k=gym+gloves","https://www.amazon.com/s?k=yoga+mat",
+  "https://www.amazon.com/s?k=school+bag","https://www.amazon.com/s?k=notebook","https://www.amazon.com/s?k=pen+set","https://www.amazon.com/s?k=calculator","https://www.amazon.com/s?k=geometry+box",
+  "https://www.amazon.com/s?k=novel+book","https://www.amazon.com/s?k=comic+book","https://www.amazon.com/s?k=story+book","https://www.amazon.com/s?k=dictionary","https://www.amazon.com/s?k=magazine",
+  "https://www.amazon.com/s?k=toy+car","https://www.amazon.com/s?k=doll","https://www.amazon.com/s?k=building+blocks","https://www.amazon.com/s?k=puzzle+game","https://www.amazon.com/s?k=remote+helicopter",
+  "https://www.amazon.com/s?k=car+cover","https://www.amazon.com/s?k=bike+helmet","https://www.amazon.com/s?k=car+vacuum+cleaner","https://www.amazon.com/s?k=tyre+inflator","https://www.amazon.com/s?k=phone+holder+car",
+  "https://www.amazon.com/s?k=plant+pot","https://www.amazon.com/s?k=garden+tools","https://www.amazon.com/s?k=watering+can","https://www.amazon.com/s?k=seed+pack","https://www.amazon.com/s?k=artificial+plant",
+  "https://www.amazon.com/s?k=dog+food","https://www.amazon.com/s?k=cat+food","https://www.amazon.com/s?k=pet+bed","https://www.amazon.com/s?k=pet+toy","https://www.amazon.com/s?k=pet+shampoo",
+  "https://www.amazon.com/s?k=chocolate+box","https://www.amazon.com/s?k=dry+fruits","https://www.amazon.com/s?k=biscuits","https://www.amazon.com/s?k=green+tea","https://www.amazon.com/s?k=coffee+powder",
+  "https://www.amazon.com/s?k=travel+bag","https://www.amazon.com/s?k=trolley+bag","https://www.amazon.com/s?k=passport+cover","https://www.amazon.com/s?k=neck+pillow","https://www.amazon.com/s?k=travel+bottle",
+  "https://www.amazon.com/s?k=usb+cable","https://www.amazon.com/s?k=charger","https://www.amazon.com/s?k=extension+board","https://www.amazon.com/s?k=led+bulb","https://www.amazon.com/s?k=emergency+light",
+  "https://www.amazon.com/s?k=handbag","https://www.amazon.com/s?k=wallet","https://www.amazon.com/s?k=belt","https://www.amazon.com/s?k=mens+watch","https://www.amazon.com/s?k=womens+watch",
+  "https://www.amazon.com/s?k=protein+powder","https://www.amazon.com/s?k=dumbbells","https://www.amazon.com/s?k=earbuds","https://www.amazon.com/s?k=projector","https://www.amazon.com/s?k=gaming+chair"
+];
+
+const categoryImages = categoryNames.map(name =>
+  `https://placehold.co/400x250/4facfe/ffffff?text=${encodeURIComponent(name)}`
+);
+
+const grid = document.getElementById("categoryGrid");
+
+categoryNames.forEach((name, i) => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
+    <div class="badge">Category ${i + 1}</div>
+    <img src="${categoryImages[i]}" alt="${name}">
+    <div class="card-body">
+      <h3>${name}</h3>
+      <p>Explore top products and best offers in this category.</p>
+      <a class="btn" href="${categoryLinks[i]}" target="_blank" onclick="saveClick('${name}','${categoryLinks[i]}')">View Products</a>
+    </div>
+  `;
+  grid.appendChild(card);
+});
+
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if (currentUser) {
+  document.getElementById("welcomeText").innerText =
+    `Welcome ${currentUser.name} | Explore amazing categories`;
+}
+</script>
+</body>
+</html>
