@@ -29,11 +29,3 @@ A modern shopping categories website with login, signup, and interactive UI.
 - JavaScript
 - Netlify (Hosting)
 
----
-
-## 📸 Preview
-![Preview](https://placehold.co/800x400?text=Categories+Website)
-
----
-
-## 📂 Project Structure
